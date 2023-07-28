@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Endpoint Configuration</h1>
+            </div>
+            <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Endpoints</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                      <h3 class="card-title">Defined Endpoints</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Link</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for row in endpoints %}
+                          <tr>
+                            <td>{{row.display_name}}</td>
+                            <td>dataphobe.com/alert/{{row.uid}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-secondary">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                                  </div>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    
+        
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                
+                <div class="card card-secondary">
+                    <div class="card-header">
+                      <h3 class="card-title">Create New Endpoint</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form>
+                      <div class="card-body">
+                        <div class="form-group">
+                          <label for="endpointDisplayNameInput">Display Name</label>
+                          <input type="input" class="form-control" id="endpointDisplayNameInput" placeholder="Endpoint Display Name">
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+                      <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Create New</button>
+                      </div>
+                    </form>
+                </div>
+
+                <div class="card card-secondary">
+                    <div class="card-header">
+                      <h3 class="card-title">Edit Endpoint</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form>
+                      <div class="card-body">
+                        <div class="form-group">
+                          <label for="endpointDisplayNameInput">Display Name</label>
+                          <input type="input" class="form-control" id="endpointDisplayNameInput" placeholder="Endpoint Display Name">
+                        </div>
+                        <div class="form-group">
+                          <label for="endpointAddressInput">Endpoint Identifier</label>
+                          <input type="input" class="form-control" id="endpointAddressInput" placeholder="UID">
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+                      <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+{% endblock %}

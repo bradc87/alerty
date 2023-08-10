@@ -89,6 +89,20 @@ def getEndpointByUID(endpointUID):
     endpointResult = endpointResultSet.mappings().all()
     return endpointResult
 
+def createAlertHistoryRecord(alertID, historyType, historyUser, historySummary) -> bool:
+    insertQuery = text("""INSERT INTO alert_history (alert_id, effective_date, type, user, summary)
+                       VALUES (:alertID, NOW(), :historyType, :historyUser, :historySummary)""")
+    alertHistoryResult = executeSQL(insertQuery, {'alertID': alertID, 'historyType': historyType, 'historyUser': historyUser, 'histoySummary': historySummary})
+    print(f'alertHistoryResult Value: {len(alertHistoryResult)}')
+    return True
+
+def updateAlertStatus(alertID, userID, newAlertStatus) -> bool:
+    updateQuery = text("""UPDATE alert SET status = :status
+                       WHERE id = :alertID""")
+    alertResult = executeSQL(updateQuery, {'status': newAlertStatus, 'alertID': alertID})
+    createAlertHistoryRecord(alertID, 'alertStatusUpdate', 'admin', f'User admin updated the status to {newAlertStatus}')
+    return True
+
 def createAlert(alertEndpoint, alertName, alertBody, alertOrigin=None, alertCategory=None, alertPriority=None):
     endpointDetails = getEndpointByUID(alertEndpoint)
     if endpointDetails == False:

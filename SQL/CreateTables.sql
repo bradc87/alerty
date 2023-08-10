@@ -30,6 +30,8 @@ CREATE TABLE alert_history(
 id INT NOT NULL AUTO_INCREMENT,
 alert_id INT, 
 effective_date DATETIME, 
+type VARCHAR(32),
+user VARCHAR(32), 
 summary VARCHAR(1000),
 CONSTRAINT pk_alert_history PRIMARY KEY (id),
 CONSTRAINT fk_alert_id FOREIGN KEY (alert_id) REFERENCES alert (id)

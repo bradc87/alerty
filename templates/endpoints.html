@@ -41,8 +41,8 @@
                             <td>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-secondary">Edit</button>
-                                    <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                                  </div>
+                                    <button type="button" class="btn btn-sm btn-danger endpointDelete" value="{{row.id}}">Delete</button>
+                                </div>
                             </td>
                           </tr>
                           {% endfor %}
@@ -62,7 +62,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form>
+                    <form id="createNewEndpointForm">
                       <div class="card-body">
                         <div class="form-group">
                           <label for="endpointDisplayNameInput">Display Name</label>
@@ -71,7 +71,7 @@
                       </div>
                       <!-- /.card-body -->
                       <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Create New</button>
+                        <button id="createEndpointSubmitButton" type="submit" class="btn btn-primary">Create New</button>
                       </div>
                     </form>
                 </div>
@@ -103,4 +103,5 @@
         </div>
     </div>
   </section>
+  <script src="{{ url_for('static', filename='js/endpoints.js') }}"></script>
 {% endblock %}

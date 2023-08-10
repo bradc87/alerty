@@ -2,7 +2,7 @@
 {% block LSidebar %}
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="{{ url_for('render_home') }}" class="brand-link">
+  <a href="{{ url_for('main.render_home') }}" class="brand-link">
     <span style="padding-left: 10px "></span>
     <i class="nav-icon far fa-bell"></i>
     <span style="padding-left: 3px" class="brand-text font-weight-regular">Alerty</span>
@@ -14,13 +14,22 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li class="nav-header">ALERTS</li>
+        <li class="nav-item">
+          <a href="{{ url_for('main.render_alerts') }}" class="nav-link">
+            <i class="nav-icon fas fa-exclamation"></i></i>
+            <p>
+              All Open Alerts
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
         <li class="nav-header">CONFIGURE</li>
         <li class="nav-item">
-          <a href="{{ url_for('render_endpoints') }}" class="nav-link">
+          <a href="{{ url_for('main.render_endpoints') }}" class="nav-link">
             <i class="nav-icon fas fa-network-wired"></i>
             <p>
               Endpoints
-              <span class="right badge badge-danger">New</span>
             </p>
           </a>
         </li>

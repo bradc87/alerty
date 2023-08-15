@@ -61,7 +61,7 @@ def endpoint_create():
     response = {"status":"fail", "statusMessage": f"Problem encountered while creating endpoint"}
     return jsonify(response), 500
 
-@main_bp.route('/alert/<endpoint>', methods=['POST'])
+@main_bp.route('/<endpoint>', methods=['POST'])
 def alert_create(endpoint):
     requestDict = request.get_json()
     alertName = requestDict['alertName']

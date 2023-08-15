@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from Alerty import getActiveAlerts, getEndpoints, deleteEndpoint, getEndpointByID, createEndpoint, createAlert, getAlertByID
+from Alerty import getActiveAlerts, getEndpoints, deleteEndpoint, getEndpointByID, createEndpoint, createAlert, getAlertByID,updateAlertStatus
 
 main_bp = Blueprint('main', __name__)
 
@@ -78,3 +78,17 @@ def alert_create(endpoint):
     response = {"status":"success", "statusMessage": f"Alert created successfully"}
     return jsonify(response), 201
 
+@main_bp.route('/alert/updateStatus', methods=['POST'])
+def alert_status_change(alertID, newAlertStatus):
+    requestDict = request.get_json()
+    alertName = requestDict['alertId']
+    alertBody = requestDict['alertStatus']
+    
+    statusUpdate = updateAlertStatus(alertID, 'admin', newAlertStatus)
+
+    if statusUpdate == False:
+        response = {"status":"fail", "statusMessage": f"Problem encountered while altering alert"}
+        return jsonify(response), 501
+    
+    response = {"status":"success", "statusMessage": f"Alert altered successfully"}
+    return jsonify(response), 201

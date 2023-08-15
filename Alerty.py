@@ -92,7 +92,7 @@ def getEndpointByUID(endpointUID):
 def createAlertHistoryRecord(alertID, historyType, historyUser, historySummary) -> bool:
     insertQuery = text("""INSERT INTO alert_history (alert_id, effective_date, type, user, summary)
                        VALUES (:alertID, NOW(), :historyType, :historyUser, :historySummary)""")
-    alertHistoryResult = executeSQL(insertQuery, {'alertID': alertID, 'historyType': historyType, 'historyUser': historyUser, 'histoySummary': historySummary})
+    alertHistoryResult = executeSQL(insertQuery, {'alertID': alertID, 'historyType': historyType, 'historyUser': historyUser, 'historySummary': historySummary})
     print(f'alertHistoryResult Value: {len(alertHistoryResult)}')
     return True
 

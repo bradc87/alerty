@@ -79,10 +79,10 @@ def alert_create(endpoint):
     return jsonify(response), 201
 
 @main_bp.route('/alert/updateStatus', methods=['POST'])
-def alert_status_change(alertID, newAlertStatus):
+def alert_status_change():
     requestDict = request.get_json()
-    alertName = requestDict['alertId']
-    alertBody = requestDict['alertStatus']
+    alertID = requestDict['alertID']
+    newAlertStatus = requestDict['alertStatus']
     
     statusUpdate = updateAlertStatus(alertID, 'admin', newAlertStatus)
 

@@ -78,12 +78,10 @@ def alert_create(endpoint):
     response = {"status":"success", "statusMessage": f"Alert created successfully"}
     return jsonify(response), 201
 
-@main_bp.route('/alert/updateStatus', methods=['POST'])
-def alert_status_change():
+@main_bp.route('/alert/<alertID>/status', methods=['PUT'])
+def alert_status_change(alertID):
     requestDict = request.get_json()
-    alertID = requestDict['alertID']
     newAlertStatus = requestDict['alertStatus']
-    
     statusUpdate = updateAlertStatus(alertID, 'admin', newAlertStatus)
 
     if statusUpdate == False:

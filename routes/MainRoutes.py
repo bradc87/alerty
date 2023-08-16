@@ -90,3 +90,12 @@ def alert_status_change(alertID):
     
     response = {"status":"success", "statusMessage": f"Alert altered successfully"}
     return jsonify(response), 201
+
+@main_bp.route('/alert/<alertID>', methods=['GET'])
+def alert_details(alertID):
+    alertDetails = getAlertDetails(alertID)
+    if alertDetails is None:
+        response = {"status":"fail", "statusMessage": f"Problem encountered while retrieving alert details"}
+        return jsonify(response), 501
+    response = alertDetails
+    return jsonify(response), 201

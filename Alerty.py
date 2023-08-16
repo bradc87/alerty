@@ -13,11 +13,11 @@ LOG_PATH = f"{SCRIPT_PATH}{LOG_DIR}"
 dbEngine = create_engine("mysql+mysqlconnector://netadmin:12221222@192.168.0.30/dataphobe")
 
 def logMessage(msgClass, logText):
-    curDate = datetime.now().strftime("%Y-%m-%d")
-    curDateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    logfilePath = f"{LOG_PATH}CreateBillingCSV.{curDate}.log"  
-   
-    if (msgClass == 'DEBUG' and DEBUG != 'Yes'):
+#    curDate = datetime.now().strftime("%Y-%m-%d")
+#    curDateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#    logfilePath = f"{LOG_PATH}CreateBillingCSV.{curDate}.log"  
+#   
+#    if (msgClass == 'DEBUG' and DEBUG != 'Yes'):
         return
 
 def executeSQL(sql_query, *params):
@@ -40,14 +40,17 @@ def createEndpoint(displayName):
     newEndpointResult = newEndpointResultSet.mappings().all()
     return newEndpointResult
 
-def deleteEndpoint(endpointID):
+def deleteEndpoint(endpointID) -> bool:
     if len(getEndpointByID(endpointID)) == 0:
         logMessage('WARNING', f'Attempted to delete: {endpointID}, which does not exist')
         return False
     deleteQuery = text('DELETE FROM endpoint WHERE id = :id')
-    executeSQL(deleteQuery, {'id':endpointID})
-    logMessage('INFO', f'Deleting endpoint: {endpointID}')
-    return True
+    deleteResult = executeSQL(deleteQuery, {'id':endpointID})
+    if deleteResult.rowcount == 1:
+        logMessage('INFO', f'Deleted endpoint: {endpointID}')
+        return True
+    logMessage('ERROR', f'Issue occurred deleting endpoint {endpointID}')
+    return False
     
 def getEndpointByID(endpointID):
     selectQuery = text("SELECT display_name, uid FROM endpoint WHERE id = :id") 
@@ -80,7 +83,7 @@ def getAlertByID(alertID):
                         JOIN (SELECT * FROM reference_code WHERE reference_type = 'alertStatus') rc ON a.status = rc.reference_code
                         WHERE CONCAT('AL', a.id) = {alertID}
                         """)
-
+    
 def getEndpointByUID(endpointUID):
     selectQuery = text("SELECT * FROM endpoint WHERE uid = :uid")
     endpointResultSet = executeSQL(selectQuery, {'uid': endpointUID})
@@ -93,16 +96,20 @@ def createAlertHistoryRecord(alertID, historyType, historyUser, historySummary) 
     insertQuery = text("""INSERT INTO alert_history (alert_id, effective_date, type, user, summary)
                        VALUES (:alertID, NOW(), :historyType, :historyUser, :historySummary)""")
     alertHistoryResult = executeSQL(insertQuery, {'alertID': alertID, 'historyType': historyType, 'historyUser': historyUser, 'historySummary': historySummary})
-    print(f'alertHistoryResult Value: {alertHistoryResult.rowcount}')
-    return True
+    if alertHistoryResult.rowcount == 1:
+        return True
+    logMessage('ERROR', f'Alert history record could not be created for {alertID}')
+    return False
 
 def updateAlertStatus(alertID, userID, newAlertStatus) -> bool:
     updateQuery = text("""UPDATE alert SET status = :status
                        WHERE id = :alertID""")
     alertResult = executeSQL(updateQuery, {'status': newAlertStatus, 'alertID': alertID})
-    createAlertHistoryRecord(alertID, 'alertStatusUpdate', 'admin', f'User admin updated the status to {newAlertStatus}')
-    return True
-
+    if alertResult.rowcount == 1:
+        alertHistoryResult = createAlertHistoryRecord(alertID, 'alertStatusUpdate', 'admin', f'User admin updated the status to {newAlertStatus}')
+        return True
+    return False
+    
 def createAlert(alertEndpoint, alertName, alertBody, alertOrigin=None, alertCategory=None, alertPriority=None):
     endpointDetails = getEndpointByUID(alertEndpoint)
     if endpointDetails == False:
@@ -120,16 +127,8 @@ def createAlert(alertEndpoint, alertName, alertBody, alertOrigin=None, alertCate
     result = executeSQL(insertQuery, {'endpointID': alertEndpointID, 'status': 1, 'body': alertBody, 'name': alertName, 'priority': alertPriority, 'category': alertCategory})
     print(result.rowcount)
     return result
-    
 
 app = Flask(__name__)
 from routes.MainRoutes import main_bp
 # Register the blueprint
 app.register_blueprint(main_bp)
-    
-    
-    
-    
-        
-    
-    

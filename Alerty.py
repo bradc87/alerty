@@ -9,7 +9,6 @@ SCRIPT_PATH = os.path.dirname(__file__)
 LOG_DIR = 'logs'
 LOG_PATH = f"{SCRIPT_PATH}{LOG_DIR}"
 
-
 dbEngine = create_engine("mysql+mysqlconnector://netadmin:12221222@192.168.0.30/dataphobe")
 
 def logMessage(msgClass, logText):

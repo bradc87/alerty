@@ -50,7 +50,7 @@
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                                   <span class="sr-only">Toggle Dropdown</span>
                                 </button>
-                                <div class="dropdown-menu" role="menu" style="">
+                                <div class="dropdown-menu" role="menu">
                                   <a class="dropdown-item statusUpdateButton" alertID="{{row.id}}" value="2" href="#">Acknowledge</a>
                                   <a class="dropdown-item statusUpdateButton" alertID="{{row.id}}" value="3" href="#">Close</a>
                                   <div class="dropdown-divider"></div>
@@ -71,5 +71,5 @@
         </div>
     </div>
   </section>
-  <script src="{{ url_for('static', filename='js/endpoints.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/alertsTable.js') }}"></script>
 {% endblock %}

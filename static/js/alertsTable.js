@@ -1,42 +1,43 @@
 document.addEventListener("DOMContentLoaded", function() {
     
-    var deleteButtons = document.querySelectorAll(".statusUpdateButton");
+    var statusUpdateButtons = document.querySelectorAll(".statusUpdateButton");
     statusUpdateButtons.forEach(function(button) {
         button.addEventListener("click", function() {
-            var newStatus = this.value;
-            var alertID = this.alertID;
+            var newStatus = this.getAttribute("value");
+            var alertID = this.getAttribute("alertid");
+            alertID = alertID.replace("AL","");
+            console.log(alertID);
             updateAlertStatusFetchCall(alertID, newStatus)
         });
     });   
 
     function updateAlertStatusFetchCall(alertID, newStatus) {
-        fetch("/endpoint/alert/<alertID>/status", {
+        console.log(JSON.stringify({ alertStatus: newStatus }));
+
+        fetch(`/alert/${alertID}/status`, {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          method: "POST",
+          method: "PUT",
           body: JSON.stringify({
-            "endpointID": endpointID,
-            "modifyAction": "delete"
+            alertStatus: newStatus
           })
+          
         })
-        .then(deleteCallSucceeded) // Separate success callback for updateAlertStatusFetchCall
+
+        .then(updateCallSucceeded) // Separate success callback for updateAlertStatusFetchCall
         .catch(fetchCallFailed);
       }
     
-      function deleteCallSucceeded(res) {
-        console.log("Delete call succeeded:", res);
+      function updateCallSucceeded(res) {
+        console.log("Alert update call succeeded:", res);
         // Handle the delete call response or do any other logic here if needed
-        location.reload(); // Reload the page once the delete call is successful
+        //location.reload(); // Reload the page once the delete call is successful
       }
 
 
-function fetchCallSucceeded(res) {
-  console.log(res)
-  location.reload()
-  window.reload()
-}
+
 function fetchCallFailed(err) {
   console.log(err)
 }

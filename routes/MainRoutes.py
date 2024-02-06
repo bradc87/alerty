@@ -80,6 +80,7 @@ def alert_create(endpoint):
 
 @main_bp.route('/alert/<alertID>/status', methods=['PUT'])
 def alert_status_change(alertID):
+    print(request.get_json())
     requestDict = request.get_json()
     newAlertStatus = requestDict['alertStatus']
     statusUpdate = updateAlertStatus(alertID, 'admin', newAlertStatus)
